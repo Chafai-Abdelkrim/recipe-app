@@ -36,6 +36,19 @@ export const MealAPI = {
       return null;
     }
   },
+  // get multiple random meals
+  getRandomMeals: async (count = 6) => {
+    try {
+      const promises = Array(count)
+        .fill()
+        .map(() => MealAPI.getRandomMeal());
+      const meals = await Promise.all(promises);
+      return meals.filter((meal) => meal !== null);
+    } catch (error) {
+      console.error("Error getting random meals:", error);
+      return [];
+    }
+  },
   // list all meal categories
   getCategories: async () => {
     try {
