@@ -15,7 +15,7 @@ import { COLORS } from "../../constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import CategoryFilter from "../../components/CategoryFilter";
 import RecipeCard from "../../components/RecipeCard";
-import LoadingSpinner from "../../components/LoadingSpinner";
+
 
 const HomeScreen = () => {
   const router = useRouter();
@@ -78,6 +78,12 @@ const HomeScreen = () => {
   const handleCategorySelect = async (category) => {
     setSelectedCategory(category);
     await loadCategoryData(category);
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await loadData();
+    setRefreshing(false);
   };
 
   useEffect(() => {
@@ -187,6 +193,46 @@ const HomeScreen = () => {
             </TouchableOpacity>
           </View>
         )}
+
+        {/* Categories section */}
+        {categories.length > 0 && (
+          <CategoryFilter
+            categories={categories}
+            selectedCategory={selectedCategory}
+            onSelectCategory={handleCategorySelect}
+          />
+        )}
+
+        <View style={homeStyles.recipesSection}>
+          <View style={homeStyles.sectionHeader}>
+            <Text style={homeStyles.sectionTitle}>{selectedCategory}</Text>
+          </View>
+
+          {recipes.length > 0 ? (
+            <FlatList
+              data={recipes}
+              renderItem={({ item }) => <RecipeCard recipe={item} />}
+              keyExtractor={(item) => item.id.toString()}
+              numColumns={2}
+              columnWrapperStyle={homeStyles.row}
+              contentContainerStyle={homeStyles.recipesGrid}
+              scrollEnabled={false}
+              // ListEmptyComponent={}
+            />
+          ) : (
+            <View style={homeStyles.emptyState}>
+              <Ionicons
+                name="restaurant-outline"
+                size={64}
+                color={COLORS.textLight}
+              />
+              <Text style={homeStyles.emptyTitle}>No recipes found</Text>
+              <Text style={homeStyles.emptyDescription}>
+                Try a different category
+              </Text>
+            </View>
+          )}
+        </View>
       </ScrollView>
     </View>
   );
