@@ -19,6 +19,7 @@ import { Ionicons } from "@expo/vector-icons";
 import VerifyEmail from "./verify-email";
 
 const SignUpScreen = () => {
+  console.log("screen rendring...")
   const router = useRouter();
   const { isLoaded, signUp } = useSignUp();
   const [email, setEmail] = useState("");
