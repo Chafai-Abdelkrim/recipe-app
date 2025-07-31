@@ -44,7 +44,7 @@ app.post("/api/favorites", async (req, res) => {
 app.get("/api/favorites/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
-    const userFavorites = db
+    const userFavorites = await db
       .select()
       .from(favoritesTable)
       .where(eq(favoritesTable.userId, userId));
@@ -52,7 +52,7 @@ app.get("/api/favorites/:userId", async (req, res) => {
     res.status(200).json(userFavorites);
   } catch (error) {
     console.log("Error fetching favorite", error);
-    res.status(500).json({ error: "Somthing went wrong" });
+    res.status(500).json({ error: "Something went wrong" });
   }
 });
 
